@@ -1,0 +1,32 @@
+name: Apply repository rulesets
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: apply-repository-rulesets
+  cancel-in-progress: false
+
+jobs:
+  apply:
+    name: Apply five main-branch rulesets
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Check out quality-kit
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Apply and verify rulesets
+        env:
+          GH_TOKEN: ${{ secrets.RULESET_ADMIN_TOKEN }}
+        run: |
+          if [[ -z "${GH_TOKEN}" ]]; then
+            echo "::error::Repository secret RULESET_ADMIN_TOKEN is not configured."
+            exit 1
+          fi
+          bash scripts/apply-rulesets.sh
