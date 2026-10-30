@@ -9,7 +9,7 @@ from pathlib import Path
 
 REQUIRED = {
     "id", "control", "reason", "risk", "compensating_control",
-    "owner", "approver", "approved_on", "expires_on", "tracking_issue",
+    "owner", "approver", "approved_on", "expires_on", "tracking_issue", "status",
 }
 
 
@@ -39,6 +39,8 @@ def main() -> int:
         if missing:
             errors.append(f"{prefix} missing fields: {', '.join(missing)}")
             continue
+        if entry["status"] != "approved":
+            errors.append(f"{prefix}.status must be approved")
         identifier = str(entry["id"]).strip()
         if not identifier or identifier in seen:
             errors.append(f"{prefix} has an empty or duplicate id")
@@ -49,6 +51,8 @@ def main() -> int:
         try:
             approved = date.fromisoformat(entry["approved_on"])
             expires = date.fromisoformat(entry["expires_on"])
+            if approved > today:
+                errors.append(f"{prefix}.approved_on cannot be in the future")
             if expires <= approved:
                 errors.append(f"{prefix}.expires_on must be after approved_on")
             if expires < today:
