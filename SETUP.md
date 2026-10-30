@@ -26,6 +26,15 @@ Diese Einstellungen stecken in keiner Datei. Sie werden bei jedem neuen Repo ein
       dort an, wo sie es brauchen).
 - [ ] **Allow GitHub Actions to create and approve pull requests**: aus.
 
+## Security baseline für jedes neue Projekt
+
+- [ ] Sicherheitsstufe Basic, Standard oder Critical und Begründung im README festhalten.
+- [ ] `SECURITY_CHECKLIST.md` abarbeiten; für Standard/Critical ein Threat Model aus `THREAT_MODEL_TEMPLATE.md` anlegen.
+- [ ] `security-exceptions.json` versionieren (ohne Ausnahmen exakt `[]`); Ausnahmen zusätzlich in `SECURITY_EXCEPTIONS.md` erläutern. Der Security-Policy-Workflow blockiert ungültige oder abgelaufene Ausnahmen.
+- [ ] Standard/Critical: Releases mit GitHub Artifact Attestations versehen und vor Extraktion/Ausführung gegen erwartetes Repository und Signer-Workflow verifizieren.
+- [ ] Critical: Least-Privilege-Installation, Anti-Downgrade, serialisierte Updates, Healthcheck, Backup und Rollback dokumentieren und testen.
+- [ ] Den Status `security-policy` und alle sicherheitsrelevanten CI-Jobs als erforderliche Checks im `main`-Ruleset konfigurieren. Ein Workflow ohne Required-Check-Schutz lässt sich durch Merge umgehen.
+
 ## Nach dem ersten Merge
 
 - [ ] Die Scorecard läuft (`scorecard.yml`, Tab *Actions*), Ergebnis unter *Security → Code scanning*.
