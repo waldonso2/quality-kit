@@ -33,6 +33,12 @@ Use this checklist when creating a repository from a quality-kit template and be
 - [ ] Health check, backup, and rollback behavior are tested.
 - [ ] Logs avoid secrets and sensitive data.
 
+## Automated enforcement
+- [ ] `security-policy` is a required status check in the default-branch ruleset.
+- [ ] `security-exceptions.json` is present and validated in CI; no expired or unapproved exceptions.
+- [ ] Required CI checks cannot be skipped by path filters or conditional job logic.
+- [ ] Release publication depends on successful artifact attestation generation; deployment depends on successful verification.
+
 ## Ongoing
 - [ ] Dependency and vulnerability scans run on a schedule.
 - [ ] Alerts have an owner and remediation target.
