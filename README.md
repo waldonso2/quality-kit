@@ -55,7 +55,7 @@ Ergebnisse nur aus einem Workflow, der im geprüften Repo selbst liegt.
 
 The mandatory cross-project rules are defined in [SECURITY_BASELINE.md](SECURITY_BASELINE.md). Use [SECURITY_CHECKLIST.md](SECURITY_CHECKLIST.md) for each new project and release, [THREAT_MODEL_TEMPLATE.md](THREAT_MODEL_TEMPLATE.md) for project threat analysis, and [SECURITY_EXCEPTIONS.md](SECURITY_EXCEPTIONS.md) for time-limited exceptions.
 
-Security tiers are Basic, Standard, and Critical. A control is considered implemented only when a blocking automated check enforces it or an approved, unexpired exception records the residual risk. The reusable [release-verification.yml](.github/workflows/release-verification.yml) gate verifies a downloaded artifact's GitHub attestation against the expected repository and signer workflow. See the release and deployment guidance in the repository docs.
+Security tiers are Basic, Standard, and Critical. A control is considered implemented only when a blocking automated check enforces it or an approved, unexpired exception records the residual risk. The reusable [release-verification.yml](.github/workflows/release-verification.yml) gate verifies a downloaded artifact's GitHub attestation against the expected repository and signer workflow.
 
 ## Neues Projekt
 
