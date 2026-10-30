@@ -51,6 +51,12 @@ Ergebnisse nur aus einem Workflow, der im geprüften Repo selbst liegt.
 - **Kennzahlen** stehen in `KENNZAHLEN.md` jedes Projekts, gegliedert nach ISO/IEC 25010. Referenzen: OWASP ASVS 5.0
   Stufe 2, OWASP Top 10, OpenSSF Scorecard, SLSA, WCAG 2.2 AA, Core Web Vitals, Nielsens Antwortzeiten.
 
+## Security baseline and release verification
+
+The mandatory cross-project rules are defined in [SECURITY_BASELINE.md](SECURITY_BASELINE.md). Use [SECURITY_CHECKLIST.md](SECURITY_CHECKLIST.md) for each new project and release, [THREAT_MODEL_TEMPLATE.md](THREAT_MODEL_TEMPLATE.md) for project threat analysis, and [SECURITY_EXCEPTIONS.md](SECURITY_EXCEPTIONS.md) for time-limited exceptions.
+
+Security tiers are Basic, Standard, and Critical. A control is considered implemented only when a blocking automated check enforces it or an approved, unexpired exception records the residual risk. The reusable [release-verification.yml](.github/workflows/release-verification.yml) gate verifies a downloaded artifact's GitHub attestation against the expected repository and signer workflow. See the release and deployment guidance in the repository docs.
+
 ## Neues Projekt
 
 1. Auf GitHub: Vorlage öffnen → **Use this template** → **Create a new repository**.
