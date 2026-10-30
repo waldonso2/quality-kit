@@ -1,6 +1,10 @@
 name: CI result notification
 
 on:
+  # zizmor: ignore[dangerous-triggers]
+  # Safe by design: this workflow consumes only workflow_run metadata. It never checks out,
+  # downloads, or executes artifacts/code from the triggering workflow. The only privileged
+  # operations are GitHub API comments using this isolated, narrowly scoped job token.
   workflow_run:
     workflows:
       - CI
