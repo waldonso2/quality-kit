@@ -1,0 +1,45 @@
+name: Verify release provenance
+
+# Reusable verification gate for consumers that download a release artifact.
+# The calling workflow must download the artifact before invoking this workflow.
+on:
+  workflow_call:
+    inputs:
+      artifact-path:
+        description: Path to the downloaded artifact or checksum file to verify.
+        required: true
+        type: string
+      signer-workflow:
+        description: Expected workflow identity, e.g. .github/workflows/release.yml.
+        required: true
+        type: string
+      repository:
+        description: Expected owner/repository. Defaults to the caller repository.
+        required: false
+        type: string
+        default: ""
+
+permissions:
+  contents: read
+  attestations: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      attestations: read
+    steps:
+      - name: Verify GitHub artifact attestation
+        env:
+          ARTIFACT_PATH: ${{ inputs.artifact-path }}
+          SIGNER_WORKFLOW: ${{ inputs.signer-workflow }}
+          EXPECTED_REPOSITORY: ${{ inputs.repository || github.repository }}
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -f "$ARTIFACT_PATH"
+          gh attestation verify "$ARTIFACT_PATH" \
+            --repo "$EXPECTED_REPOSITORY" \
+            --signer-workflow "$SIGNER_WORKFLOW"

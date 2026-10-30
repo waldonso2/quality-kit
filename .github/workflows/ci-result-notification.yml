@@ -1,0 +1,64 @@
+name: CI result notification
+
+on:
+  # zizmor: ignore[dangerous-triggers]
+  # Safe by design: this workflow consumes only workflow_run metadata. It never checks out,
+  # downloads, or executes artifacts/code from the triggering workflow. The only privileged
+  # operations are GitHub API comments using this isolated, narrowly scoped job token.
+  workflow_run:
+    workflows:
+      - CI
+      - CodeQL
+    types:
+      - completed
+
+permissions: {}
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      issues: write
+    steps:
+      - name: Notify the workflow initiator
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
+        with:
+          script: |
+            const run = context.payload.workflow_run;
+            const actor = run.actor?.login;
+            if (!actor) {
+              core.setFailed("The originating GitHub actor could not be determined.");
+              return;
+            }
+
+            const conclusion = run.conclusion || "unknown";
+            const icon = conclusion === "success" ? "✅" : conclusion === "failure" ? "❌" : "⚠️";
+            const body = [
+              `## ${icon} ${run.name} — ${conclusion.toUpperCase()}`,
+              `@${actor} CI-Lauf abgeschlossen.`,
+              "",
+              `- **Repository:** ${context.repo.owner}/${context.repo.repo}`,
+              `- **Workflow:** ${run.name}`,
+              `- **Ausgelöst von:** @${actor}`,
+              `- **Branch:** ${run.head_branch || "—"}`,
+              `- **Commit:** \`${run.head_sha.substring(0, 7)}\``,
+              `- **Dauer:** ${Math.max(0, Math.round((new Date(run.updated_at) - new Date(run.run_started_at || run.created_at)) / 1000))} Sekunden`,
+              "",
+              `[Workflow-Lauf öffnen](${run.html_url})`
+            ].join("\n");
+
+            const pullRequest = run.pull_requests?.[0];
+            if (pullRequest?.number) {
+              await github.rest.issues.createComment({
+                ...context.repo,
+                issue_number: pullRequest.number,
+                body
+              });
+            } else {
+              await github.rest.repos.createCommitComment({
+                ...context.repo,
+                commit_sha: run.head_sha,
+                body
+              });
+            }

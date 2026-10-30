@@ -1,0 +1,17 @@
+name: Security policy
+
+on:
+  workflow_call:
+
+permissions:
+  contents: read
+
+jobs:
+  exceptions:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Validate security exceptions
+        run: python3 scripts/check_security_exceptions.py

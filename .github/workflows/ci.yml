@@ -16,3 +16,5 @@ jobs:
     uses: ./.github/workflows/workflows.yml
   dependency-review:
     uses: ./.github/workflows/dependency-review.yml
+  security-policy:
+    uses: ./.github/workflows/security-policy.yml
