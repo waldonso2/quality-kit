@@ -35,6 +35,7 @@ jobs:
           ARTIFACT_PATH: ${{ inputs.artifact-path }}
           SIGNER_WORKFLOW: ${{ inputs.signer-workflow }}
           EXPECTED_REPOSITORY: ${{ inputs.repository || github.repository }}
+          GH_TOKEN: ${{ github.token }}
         shell: bash
         run: |
           set -euo pipefail
