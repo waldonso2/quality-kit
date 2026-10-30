@@ -32,11 +32,11 @@ jobs:
             const icon = conclusion === "success" ? "✅" : conclusion === "failure" ? "❌" : "⚠️";
             const body = [
               `## ${icon} ${run.name} — ${conclusion.toUpperCase()}`,
-              `@\${actor} CI-Lauf abgeschlossen.`,
+              `@${actor} CI-Lauf abgeschlossen.`,
               "",
               `- **Repository:** ${context.repo.owner}/${context.repo.repo}`,
               `- **Workflow:** ${run.name}`,
-              `- **Ausgelöst von:** @\${actor}`,
+              `- **Ausgelöst von:** @${actor}`,
               `- **Branch:** ${run.head_branch || "—"}`,
               `- **Commit:** \`${run.head_sha.substring(0, 7)}\``,
               `- **Dauer:** ${Math.max(0, Math.round((new Date(run.updated_at) - new Date(run.run_started_at || run.created_at)) / 1000))} Sekunden`,
